@@ -1,10 +1,11 @@
 import os
 import random
 import cv2
-from matplotlib import pyplot as plt
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+from handmark_visualization import annotate_frame
+
 
 dataset_path = "test_data"
 model_path = os.path.join('custom_rps_gesture_recognizer', 'gesture_recognizer.task')
@@ -20,9 +21,7 @@ image = mp.Image.create_from_file(image_file_name)
 
 recognition_result = recognizer.recognize(image)
 print(recognition_result.gestures, recognition_result.handedness, recognition_result.hand_landmarks)
-#print(recognition_result.gestures[0][0].category_name)
 
-image = cv2.imread(image_file_name)
-image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-plt.imshow(image, interpolation='nearest')
-plt.show()
+annotated_image = annotate_frame(image.numpy_view(), recognition_result)
+cv2.imshow('Show', annotated_image)
+cv2.waitKey()

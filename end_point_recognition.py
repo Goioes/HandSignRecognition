@@ -8,11 +8,10 @@ Created on Thu Dec 12 14:43:03 2024
 from flask import Flask, request, jsonify
 import numpy as np
 import os, base64, cv2
-import subprocess
-from matplotlib import pyplot as plt
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+from handmark_visualization import annotate_frame
 
 def load_model():
     model_path = os.path.join('custom_rps_gesture_recognizer', 'gesture_recognizer.task')
@@ -34,14 +33,16 @@ def predict():
         np_image = np.frombuffer(decoded_image, dtype=np.uint8)
         image = cv2.imdecode(np_image, cv2.IMREAD_COLOR)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        plt.imshow(image, interpolation='nearest')
-        plt.show()
         
         image = mp.Image(image_format=mp.ImageFormat.SRGB, data=np.array(image))
-        result = model.recognize(image)
+        recognition_result = model.recognize(image)
+
+        annotated_image = annotate_frame(image.numpy_view(), recognition_result)
+        cv2.imshow('Show', annotated_image)
+        cv2.waitKey()
         
         try:
-            prediction = result.gestures[0][0].category_name
+            prediction = recognition_result.gestures[0][0].category_name
             if prediction == 'None':
                 prediction = 'Gesture not recognized'
 
