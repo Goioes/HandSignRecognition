@@ -2,22 +2,19 @@ import os
 import math
 import numpy as np
 import cv2
-import mediapipe as mp
 from mediapipe import solutions
 from mediapipe.framework.formats import landmark_pb2
-from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
+from mediapipe.tasks.python import BaseOptions
+from mediapipe.tasks.python.vision import GestureRecognizerOptions, GestureRecognizer, RunningMode
 
-VisionRunningMode = mp.tasks.vision.RunningMode
-
-def load_gesture_recognizer(recognizer_name, running_mode=VisionRunningMode.IMAGE, call_back=None):
+def load_gesture_recognizer(recognizer_name, running_mode=RunningMode.IMAGE, call_back=None):
     model_path = os.path.join(recognizer_name, 'gesture_recognizer.task')
-    options = vision.GestureRecognizerOptions(
-            base_options=python.BaseOptions(model_asset_path=model_path),
+    options = GestureRecognizerOptions(
+            base_options=BaseOptions(model_asset_path=model_path),
             running_mode=running_mode,
             result_callback=call_back)
     
-    return vision.GestureRecognizer.create_from_options(options)
+    return GestureRecognizer.create_from_options(options)
 
 def annotate_frame(frame, result):
     hand_landmarks_list = result.hand_landmarks

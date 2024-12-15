@@ -1,9 +1,7 @@
 import cv2
 import mediapipe as mp
+from mediapipe.tasks.python.vision import GestureRecognizerResult, RunningMode
 from utils import annotate_frame, load_gesture_recognizer
-
-GestureRecognizerResult = mp.tasks.vision.GestureRecognizerResult
-VisionRunningMode = mp.tasks.vision.RunningMode
 
 class LiveGestureRecognition():
     def __init__(self):
@@ -17,7 +15,7 @@ class LiveGestureRecognition():
 
         timestamp = 0
         with load_gesture_recognizer('custom_gesture_recognizer',
-                                     running_mode=VisionRunningMode.LIVE_STREAM,
+                                     running_mode=RunningMode.LIVE_STREAM,
                                      call_back=self.store_result) as recognizer:
             while video.isOpened(): 
                 # Capture frame-by-frame
