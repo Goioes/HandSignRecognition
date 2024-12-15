@@ -7,20 +7,12 @@ Created on Thu Dec 12 14:43:03 2024
 
 from flask import Flask, request, jsonify
 import numpy as np
-import os, base64, cv2
+import base64, cv2
 import mediapipe as mp
-from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
-from handmark_visualization import annotate_frame
-
-def load_model():
-    model_path = os.path.join('custom_rps_gesture_recognizer', 'gesture_recognizer.task')
-    base_options = python.BaseOptions(model_asset_path=model_path)
-    options = vision.GestureRecognizerOptions(base_options=base_options)
-    return vision.GestureRecognizer.create_from_options(options)
+from utils import annotate_frame, load_gesture_recognizer, resize_show_image
 
 app = Flask(__name__)
-model = load_model()
+model = load_gesture_recognizer('custom_rps_gesture_recognizer')
 
 
 @app.route("/predict", methods=['POST'])
@@ -38,8 +30,7 @@ def predict():
         recognition_result = model.recognize(image)
 
         annotated_image = annotate_frame(image.numpy_view(), recognition_result)
-        cv2.imshow('Show', annotated_image)
-        cv2.waitKey()
+        resize_show_image(annotated_image)
         
         try:
             prediction = recognition_result.gestures[0][0].category_name
