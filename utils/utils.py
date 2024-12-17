@@ -17,6 +17,10 @@ def load_gesture_recognizer(recognizer_name, running_mode=RunningMode.IMAGE, cal
     return GestureRecognizer.create_from_options(options)
 
 def determine_prediction(result):
+    """
+    Convert model prediction to human readable string, catch error if no hand detected.
+    """
+
     try:
         prediction = result.gestures[0][0].category_name
     except IndexError:
@@ -35,7 +39,11 @@ def resize_frame(frame, desired_width=480, desired_height=480):
         frame = cv2.resize(frame, (math.floor(w/(h/desired_height)), desired_height))
     return frame
 
-def draw_landmark_connections(frame, hand_landmarks):
+def draw_hand_landmark_connections(frame, hand_landmarks):
+    """
+    Draw hand landmarks and their specific connections on frame.
+    """
+
     hand_landmarks_list = hand_landmarks
     annotated_frame = np.copy(frame)
 
@@ -59,7 +67,7 @@ def put_central_text(frame, text, height, color=(0, 0, 0)):
 
     h, w = frame.shape[:2]
     text_width = cv2.getTextSize(text, font, 1, 2)[0][0]
-    text_x = int((w - text_width) / 2)
+    text_x = int((w - text_width) / 2)  # center text on x direction
     if height == 'bottom':
         text_y = h -30
     else:
@@ -74,10 +82,23 @@ def put_central_text(frame, text, height, color=(0, 0, 0)):
     return frame
     
 def annotate_frame(frame, state, prediction, hand_landmarks, desired_width=480, desired_height=480, waving=False):
+    """
+    Resize frame, indicate hand landmarks and connections if detected, display prediction and wave detection.
+
+    Args:
+        frame (np.ndarray): frame to be annotated.
+        state (str): gesture recognized.
+        prediction (str): predicted gesture.
+        hand_landmarks (list): detected hand landmark positions.
+
+    Returns:
+        np.ndarray: The annotated frame.
+    """
+
     frame = resize_frame(frame, desired_height, desired_width)
 
     if state == 'Success':
-        frame = draw_landmark_connections(frame, hand_landmarks)
+        frame = draw_hand_landmark_connections(frame, hand_landmarks)
 
     frame = put_central_text(frame, prediction, 'bottom')
 

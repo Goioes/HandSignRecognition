@@ -21,7 +21,7 @@ This project implements real-time gesture recognition using the MediaPipe framew
 - endpoint_recognition.py: creates API endpoint to access the gesture recognizer for images.
 - request_recognition.py: sends recognition request to API endpoint.
 - live_recognition.py: performs gesture recognition on webcam livestream and detects waving motion.
-
+- utils.py: contains specific helper functions such as image annotation.
 
 
 
