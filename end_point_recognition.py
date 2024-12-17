@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify
 import numpy as np
 import base64, cv2
 import mediapipe as mp
-from utils import annotate_frame, load_gesture_recognizer, resize_show_image
+from utils import load_gesture_recognizer, determine_prediction
 
 app = Flask(__name__)
 model = load_gesture_recognizer('custom_rps_gesture_recognizer')
@@ -29,16 +29,7 @@ def predict():
         image = mp.Image(image_format=mp.ImageFormat.SRGB, data=np.array(image))
         recognition_result = model.recognize(image)
 
-        annotated_image = annotate_frame(image.numpy_view(), recognition_result)
-        resize_show_image(annotated_image)
-        
-        try:
-            prediction = recognition_result.gestures[0][0].category_name
-            if prediction == 'None':
-                prediction = 'Gesture not recognized'
-
-        except IndexError:
-            prediction = 'No hand detected'
+        _, prediction = determine_prediction(recognition_result)
         
         return jsonify({"predicted_sign": prediction})
     

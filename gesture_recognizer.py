@@ -1,7 +1,8 @@
 import os
 import random
+import cv2
 import mediapipe as mp
-from utils import annotate_frame, load_gesture_recognizer, resize_show_image
+from utils import load_gesture_recognizer, annotate_frame
 
 dataset_path = "benchmark_data"
 
@@ -18,7 +19,7 @@ image = mp.Image.create_from_file(image_file_name)
 recognition_result = recognizer.recognize(image)
 print(recognition_result.gestures)
 
-annotated_image = annotate_frame(image.numpy_view(), recognition_result)
-resize_show_image(annotated_image)
-
+image, _ = annotate_frame(image.numpy_view(), recognition_result)
+cv2.imshow('Show', image)
+cv2.waitKey()
 
