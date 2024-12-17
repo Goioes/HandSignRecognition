@@ -1,6 +1,0 @@
-# ignore ALL .jpg files
-*.jpg
-
-# ignore directories
-benchmark_data
-test_data

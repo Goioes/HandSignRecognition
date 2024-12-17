@@ -8,7 +8,7 @@ from mediapipe.tasks.python import BaseOptions
 from mediapipe.tasks.python.vision import GestureRecognizerOptions, GestureRecognizer, RunningMode
 
 def load_gesture_recognizer(recognizer_name, running_mode=RunningMode.IMAGE, call_back=None):
-    model_path = os.path.join(recognizer_name, 'gesture_recognizer.task')
+    model_path = os.path.join('models', recognizer_name, 'gesture_recognizer.task')
     options = GestureRecognizerOptions(
             base_options=BaseOptions(model_asset_path=model_path),
             running_mode=running_mode,
