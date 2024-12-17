@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Dec 12 14:43:03 2024
-
-@author: gielo
-"""
-
 from flask import Flask, request, jsonify
 import numpy as np
 import base64, cv2
@@ -12,7 +5,7 @@ import mediapipe as mp
 from utils import load_gesture_recognizer, determine_prediction
 
 app = Flask(__name__)
-model = load_gesture_recognizer('custom_rps_gesture_recognizer')
+model = load_gesture_recognizer('custom_gesture_recognizer')
 
 
 @app.route("/predict", methods=['POST'])
