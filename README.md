@@ -23,6 +23,10 @@ This project implements real-time gesture recognition using the MediaPipe framew
 - live_recognition.py: performs gesture recognition on webcam livestream and detects waving motion.
 - utils.py: contains specific helper functions such as image annotation.
 
+## Dataset
+The custom gesture recognizer was trained on a partition (corresponding to the 4 recognisable signs) of the HaGRID Dataset (https://www.kaggle.com/datasets/kapitanov/hagrid/data), which contains over 30,000 unique labeled hand gesture images across 18 classes.
+
+
 
 
 
