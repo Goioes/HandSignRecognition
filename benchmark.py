@@ -22,7 +22,7 @@ for frames, labels in data_set.take(1):
         
         ground_truth = data_set.class_names[labels[i]]
         ground_truths.append(ground_truth)
-        
+
         results = recognizer.recognize(frame)
         state, prediction = determine_prediction(results)
         predictions.append(prediction)
